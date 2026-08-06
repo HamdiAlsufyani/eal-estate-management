@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Inquiry extends Model
 {
-    /** @use HasFactory<\Database\Factories\InquiryFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

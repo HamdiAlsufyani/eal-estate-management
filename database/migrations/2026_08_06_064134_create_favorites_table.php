@@ -11,10 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('favorites', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+   Schema::create('favorites', function (Blueprint $table) {
+    $table->id();
+
+    $table->foreignId('user_id')
+        ->constrained()
+        ->cascadeOnDelete();
+
+    $table->foreignId('property_id')
+        ->constrained()
+        ->cascadeOnDelete();
+
+    $table->unique([
+        'user_id',
+        'property_id'
+    ]);
+
+    $table->timestamps();
+});
     }
 
     /**

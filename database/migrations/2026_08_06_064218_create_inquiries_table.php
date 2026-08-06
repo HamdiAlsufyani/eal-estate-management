@@ -11,10 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inquiries', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+       Schema::create('inquiries', function (Blueprint $table) {
+    $table->id();
+
+    $table->foreignId('property_id')
+        ->constrained()
+        ->cascadeOnDelete();
+
+    $table->foreignId('user_id')
+        ->constrained()
+        ->cascadeOnDelete();
+
+    $table->string('phone');
+
+    $table->text('message');
+
+    $table->enum('status', [
+        'new',
+        'read',
+        'closed'
+    ])->default('new');
+
+    $table->timestamps();
+});
     }
 
     /**

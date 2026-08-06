@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    /** @use HasFactory<\Database\Factories\CityFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function districts()
+    {
+        return $this->hasMany(District::class);
+    }
+
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
+    }
 }

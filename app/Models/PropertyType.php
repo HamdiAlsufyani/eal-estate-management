@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class PropertyType extends Model
 {
-    /** @use HasFactory<\Database\Factories\PropertyTypeFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
+    }
 }

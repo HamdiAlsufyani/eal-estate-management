@@ -11,10 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('property_views', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+      Schema::create('property_views', function (Blueprint $table) {
+    $table->id();
+
+    $table->foreignId('property_id')
+        ->constrained()
+        ->cascadeOnDelete();
+
+    $table->foreignId('user_id')
+        ->nullable()
+        ->constrained()
+        ->nullOnDelete();
+
+    $table->string('ip_address')->nullable();
+
+    $table->text('user_agent')->nullable();
+
+    $table->timestamps();
+});
     }
 
     /**
