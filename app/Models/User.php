@@ -17,7 +17,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * Get the attributes that should be cast.
@@ -29,6 +29,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+                'status',
+    'profile_photo',
         ];
     }
        public function properties()
@@ -45,4 +47,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Inquiry::class);
     }
+    public function scopeActive($query)
+{
+    return $query->where('status', 'active');
+}
+
+public function scopePending($query)
+{
+    return $query->where('status', 'pending');
+}
 }
