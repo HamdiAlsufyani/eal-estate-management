@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->hasMany(Property::class);
     }
 
+    public function canManageAllProperties(): bool
+    {
+        return $this->can('properties.approve');
+    }
+
     public function favorites()
     {
         return $this->hasMany(Favorite::class);

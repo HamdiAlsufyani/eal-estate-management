@@ -7,11 +7,17 @@ use App\Models\Inquiry;
 use App\Models\Property;
 use App\Models\PropertyView;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): View|RedirectResponse
     {
+        if (! auth()->user()->canManageAllProperties()) {
+            return redirect()->route('owner.dashboard');
+        }
+
         $stats = [
             'total_properties' => Property::count(),
             'pending_properties' => Property::where('status', 'pending')->count(),

@@ -44,7 +44,85 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function activeUser(array $overrides = []): \App\Models\User
 {
-    // ..
+    return \App\Models\User::factory()->create(array_merge([
+        'status' => 'active',
+        'phone' => fake()->unique()->numerify('05########'),
+    ], $overrides));
+}
+
+function adminUser(array $permissions = []): \App\Models\User
+{
+    test()->seed(\Database\Seeders\RolePermissionSeeder::class);
+
+    $user = activeUser();
+
+    if ($permissions) {
+        $user->givePermissionTo($permissions);
+    }
+
+    return $user;
+}
+
+function makeProperty(array $overrides = []): \App\Models\Property
+{
+    $city = $overrides['city_id'] ?? null;
+    $district = $overrides['district_id'] ?? null;
+
+    if (! $city) {
+        $city = \App\Models\City::factory()->create()->id;
+    }
+
+    if (! $district) {
+        $district = \App\Models\District::factory()->create(['city_id' => $city])->id;
+    }
+
+    return \App\Models\Property::create(array_merge([
+        'user_id' => activeUser()->id,
+        'property_type_id' => \App\Models\PropertyType::factory()->create()->id,
+        'city_id' => $city,
+        'district_id' => $district,
+        'title' => 'Test Property '.uniqid(),
+        'slug' => 'test-property-'.uniqid(),
+        'description' => 'A lovely test property.',
+        'purpose' => 'sale',
+        'price' => 500000,
+        'area' => 120,
+        'address' => '123 Test Street',
+        'status' => 'approved',
+    ], $overrides));
+}
+
+function propertyPayload(array $overrides = []): array
+{
+    $city = $overrides['city_id'] ?? \App\Models\City::factory()->create()->id;
+    $district = $overrides['district_id'] ?? \App\Models\District::factory()->create(['city_id' => $city])->id;
+
+    return array_merge([
+        'title' => 'Test Listing '.uniqid(),
+        'description' => 'A lovely place to live.',
+        'property_type_id' => \App\Models\PropertyType::factory()->create()->id,
+        'city_id' => $city,
+        'district_id' => $district,
+        'purpose' => 'sale',
+        'price' => 350000,
+        'area' => 150,
+        'address' => '456 Sample Ave',
+        'bedrooms' => 3,
+        'bathrooms' => 2,
+    ], $overrides);
+}
+
+function ownerTierUser(): \App\Models\User
+{
+    return adminUser(['properties.view', 'properties.create', 'properties.edit', 'properties.delete']);
+}
+
+function staffTierUser(): \App\Models\User
+{
+    return adminUser([
+        'properties.view', 'properties.create', 'properties.edit', 'properties.delete',
+        'properties.approve', 'properties.assign_owner', 'properties.feature', 'properties.change_availability',
+    ]);
 }

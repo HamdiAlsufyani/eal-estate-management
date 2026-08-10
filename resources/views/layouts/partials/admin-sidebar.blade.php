@@ -21,14 +21,20 @@
         [
             'label' => 'Cities',
             'route' => 'admin.cities.index',
-            'permission' => 'cities.manage',
+            'permission' => 'cities.view',
             'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5M4.5 3h6l.75 18h-7.5L4.5 3ZM12.75 21V9.75l3.75-1.5v12.75M16.5 21V6l4.5-1.5v16.5" />',
         ],
         [
             'label' => 'Districts',
             'route' => 'admin.districts.index',
-            'permission' => 'districts.manage',
+            'permission' => 'districts.view',
             'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.159.69.159 1.006 0Z" />',
+        ],
+        [
+            'label' => 'Amenities',
+            'route' => 'admin.amenities.index',
+            'permission' => 'amenities.view',
+            'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />',
         ],
         [
             'label' => 'Users',
