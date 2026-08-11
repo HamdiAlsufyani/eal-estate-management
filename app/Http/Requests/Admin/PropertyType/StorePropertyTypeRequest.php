@@ -16,7 +16,7 @@ class StorePropertyTypeRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'slug' => Str::slug($this->input('slug') ?: $this->input('name')),
+            'slug' => Str::slug($this->input('slug') ?: $this->input('name_en')),
         ]);
     }
 
@@ -26,7 +26,8 @@ class StorePropertyTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:property_types,name'],
+            'name_en' => ['required', 'string', 'max:255', 'unique:property_types,name_en'],
+            'name_ar' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'unique:property_types,slug'],
             'icon' => ['nullable', 'string', 'max:255'],
             'is_active' => ['boolean'],

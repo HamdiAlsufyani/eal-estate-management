@@ -28,12 +28,12 @@ test('admin can create a property type with an auto-generated slug', function ()
     $admin = adminUser(['property_types.manage']);
 
     $response = $this->actingAs($admin)->post(route('admin.property-types.store'), [
-        'name' => 'Penthouse Suite',
+        'name_en' => 'Penthouse Suite',
         'icon' => 'building',
         'is_active' => 1,
     ]);
 
-    $propertyType = PropertyType::firstWhere('name', 'Penthouse Suite');
+    $propertyType = PropertyType::firstWhere('name_en', 'Penthouse Suite');
 
     $response->assertRedirect(route('admin.property-types.show', $propertyType));
     expect($propertyType->slug)->toBe('penthouse-suite');
@@ -45,10 +45,10 @@ test('name and slug must be unique when creating', function () {
 
     $this->actingAs($admin)
         ->post(route('admin.property-types.store'), [
-            'name' => 'Apartment',
+            'name_en' => 'Apartment',
             'is_active' => 1,
         ])
-        ->assertSessionHasErrors('name');
+        ->assertSessionHasErrors('name_en');
 });
 
 test('admin can update a property type and slug uniqueness ignores itself', function () {
@@ -56,7 +56,7 @@ test('admin can update a property type and slug uniqueness ignores itself', func
     $propertyType = PropertyType::factory()->create(['name' => 'Villa', 'slug' => 'villa']);
 
     $response = $this->actingAs($admin)->put(route('admin.property-types.update', $propertyType), [
-        'name' => 'Villa',
+        'name_en' => 'Villa',
         'slug' => 'villa',
         'is_active' => 0,
     ]);

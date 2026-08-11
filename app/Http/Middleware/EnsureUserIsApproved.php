@@ -23,14 +23,14 @@ class EnsureUserIsApproved
             auth()->logout();
 
             return redirect()->route('login')
-                ->with('error', 'حسابك قيد المراجعة من قبل الإدارة.');
+                ->with('error', __('messages.account_pending_review'));
         }
 
         if ($user->status === 'rejected') {
             auth()->logout();
 
             return redirect()->route('login')
-                ->with('error', 'تم رفض حسابك، يرجى التواصل مع الإدارة.');
+                ->with('error', __('messages.account_rejected'));
         }
 
         return $next($request);

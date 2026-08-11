@@ -86,6 +86,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Available Locales
+    |--------------------------------------------------------------------------
+    |
+    | The locales the application supports for UI translation and RTL/LTR
+    | direction switching. Used by the SetLocale middleware to validate
+    | incoming locale selections.
+    |
+    */
+
+    'available_locales' => ['en', 'ar'],
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Key
     |--------------------------------------------------------------------------
     |

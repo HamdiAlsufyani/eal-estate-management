@@ -26,8 +26,8 @@
 >
     <x-ui.select
         name="city_id"
-        label="City"
-        placeholder="Select a city"
+        label="{{ __('properties.city') }}"
+        placeholder="{{ __('properties.all_cities') }}"
         :options="$cities"
         :selected="old('city_id', $district->city_id ?? null)"
         required
@@ -36,12 +36,20 @@
     <div></div>
 
     <x-ui.input
-        name="name"
-        label="Name"
+        name="name_en"
+        label="{{ __('properties.name') }} (EN)"
         placeholder="e.g. Al Olaya"
-        value="{{ old('name', $district->name ?? '') }}"
+        value="{{ old('name_en', $district->name_en ?? '') }}"
         @input="onNameInput($event.target.value)"
         required
+    />
+
+    <x-ui.input
+        name="name_ar"
+        label="{{ __('properties.name') }} (AR)"
+        placeholder="مثال: العليا"
+        dir="rtl"
+        value="{{ old('name_ar', $district->name_ar ?? '') }}"
     />
 
     <x-ui.input
@@ -50,7 +58,7 @@
         label="Slug"
         placeholder="e.g. al-olaya"
         value="{{ old('slug', $district->slug ?? '') }}"
-        hint="Auto-generated from the name — edit manually if needed. Must be unique within the selected city."
+        hint="Auto-generated from the English name — edit manually if needed. Must be unique within the selected city."
         @input="onSlugInput()"
         required
     />

@@ -21,11 +21,15 @@ class PropertyTypeService
 
     public function create(array $data): PropertyType
     {
+        $data['name'] = $data['name_en'];
+
         return DB::transaction(fn () => PropertyType::create($data));
     }
 
     public function update(PropertyType $propertyType, array $data): PropertyType
     {
+        $data['name'] = $data['name_en'];
+
         DB::transaction(fn () => $propertyType->update($data));
 
         return $propertyType;

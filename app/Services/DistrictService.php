@@ -22,11 +22,15 @@ class DistrictService
 
     public function create(array $data): District
     {
+        $data['name'] = $data['name_en'];
+
         return DB::transaction(fn () => District::create($data));
     }
 
     public function update(District $district, array $data): District
     {
+        $data['name'] = $data['name_en'];
+
         DB::transaction(fn () => $district->update($data));
 
         return $district;

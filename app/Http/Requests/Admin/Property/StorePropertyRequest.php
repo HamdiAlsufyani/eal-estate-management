@@ -19,8 +19,10 @@ class StorePropertyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'title_en' => ['required', 'string', 'max:255'],
+            'title_ar' => ['nullable', 'string', 'max:255'],
+            'description_en' => ['required', 'string'],
+            'description_ar' => ['nullable', 'string'],
 
             'property_type_id' => ['required', Rule::exists('property_types', 'id')->where('is_active', true)],
             'city_id' => ['required', Rule::exists('cities', 'id')->where('is_active', true)],
@@ -47,7 +49,8 @@ class StorePropertyRequest extends FormRequest
             'parking_spaces' => ['nullable', 'integer', 'min:0'],
             'furnished' => ['nullable', 'boolean'],
 
-            'address' => ['required', 'string', 'max:255'],
+            'address_en' => ['required', 'string', 'max:255'],
+            'address_ar' => ['nullable', 'string', 'max:255'],
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
 

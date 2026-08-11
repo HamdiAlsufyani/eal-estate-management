@@ -16,7 +16,7 @@ class UpdateCityRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'slug' => Str::slug($this->input('slug') ?: $this->input('name')),
+            'slug' => Str::slug($this->input('slug') ?: $this->input('name_en')),
         ]);
     }
 
@@ -28,7 +28,8 @@ class UpdateCityRequest extends FormRequest
         $city = $this->route('city');
 
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('cities', 'name')->ignore($city->id)],
+            'name_en' => ['required', 'string', 'max:255', Rule::unique('cities', 'name_en')->ignore($city->id)],
+            'name_ar' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('cities', 'slug')->ignore($city->id)],
             'is_active' => ['boolean'],
         ];

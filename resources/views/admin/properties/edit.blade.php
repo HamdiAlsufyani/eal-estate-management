@@ -1,8 +1,8 @@
-<x-admin-layout title="Edit Property" :breadcrumbs="[['label' => 'Properties', 'url' => route('admin.properties.index')], ['label' => $property->title, 'url' => route('admin.properties.show', $property)], ['label' => 'Edit']]">
+<x-admin-layout title="{{ __('properties.edit_property') }}" :breadcrumbs="[['label' => __('properties.title'), 'url' => route('admin.properties.index')], ['label' => $property->title, 'url' => route('admin.properties.show', $property)], ['label' => __('messages.edit')]]">
     <x-slot name="header">
         <div>
-            <h1 class="text-xl font-semibold text-text">Edit Property</h1>
-            <p class="text-sm text-text-muted">Update {{ $property->title }}'s details.</p>
+            <h1 class="text-xl font-semibold text-text">{{ __('properties.edit_property') }}</h1>
+            <p class="text-sm text-text-muted">{{ __('properties.edit_subtitle', ['title' => $property->title]) }}</p>
         </div>
     </x-slot>
 
@@ -13,8 +13,8 @@
         @include('admin.properties.partials.form', ['property' => $property])
 
         <div class="mt-6 flex justify-end gap-3">
-            <x-ui.button :href="route('admin.properties.show', $property)" variant="outline">Cancel</x-ui.button>
-            <x-ui.button type="submit" variant="primary">Save Changes</x-ui.button>
+            <x-ui.button :href="route('admin.properties.show', $property)" variant="outline">{{ __('messages.cancel') }}</x-ui.button>
+            <x-ui.button type="submit" variant="primary">{{ __('messages.save_changes') }}</x-ui.button>
         </div>
     </form>
 </x-admin-layout>

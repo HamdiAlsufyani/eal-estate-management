@@ -50,6 +50,10 @@ class RolePermissionSeeder extends Seeder
 
             'roles.manage',
             'settings.manage',
+
+            'inquiries.view',
+            'inquiries.manage',
+            'favorites.view',
         ];
 
         foreach ($permissions as $permission) {
@@ -71,6 +75,9 @@ class RolePermissionSeeder extends Seeder
             'properties.assign_owner',
             'properties.feature',
             'properties.change_availability',
+            'inquiries.view',
+            'inquiries.manage',
+            'favorites.view',
         ]);
 
         $owner->givePermissionTo([

@@ -1,22 +1,22 @@
 @if ($propertyTypes->isEmpty())
-    <x-ui.empty-state title="No property types found" description="Try adjusting your search or filters, or create a new property type.">
+    <x-ui.empty-state title="{{ __('properties.no_property_types_found') }}" description="{{ __('properties.no_property_types_found_hint') }}">
         <x-slot name="action">
             @can('create', \App\Models\PropertyType::class)
-                <x-ui.button :href="route('admin.property-types.create')" variant="primary">Create Property Type</x-ui.button>
+                <x-ui.button :href="route('admin.property-types.create')" variant="primary">{{ __('properties.create_property_type') }}</x-ui.button>
             @endcan
         </x-slot>
     </x-ui.empty-state>
 @else
     <x-ui.table>
         <x-slot name="head">
-            <th class="w-14">ID</th>
-            <th class="w-14">Icon</th>
-            <th>Name</th>
-            <th class="hidden md:table-cell">Slug</th>
-            <th>Properties</th>
-            <th>Status</th>
-            <th class="hidden lg:table-cell">Created</th>
-            <th class="text-right">Actions</th>
+            <th class="w-14">{{ __('messages.id') }}</th>
+            <th class="w-14">{{ __('messages.icon') }}</th>
+            <th>{{ __('properties.name') }}</th>
+            <th class="hidden md:table-cell">{{ __('messages.slug') }}</th>
+            <th>{{ __('properties.title') }}</th>
+            <th>{{ __('messages.status') }}</th>
+            <th class="hidden lg:table-cell">{{ __('properties.created') }}</th>
+            <th class="text-right">{{ __('messages.actions') }}</th>
         </x-slot>
 
         @foreach ($propertyTypes as $propertyType)
@@ -47,7 +47,7 @@
 
                 <td>
                     <x-ui.badge :variant="$propertyType->is_active ? 'success' : 'gray'">
-                        {{ $propertyType->is_active ? 'Active' : 'Inactive' }}
+                        {{ $propertyType->is_active ? __('messages.active') : __('messages.inactive') }}
                     </x-ui.badge>
                 </td>
 
@@ -56,7 +56,7 @@
                 <td class="text-right">
                     <x-ui.dropdown align="right" width="56">
                         <x-slot name="trigger">
-                            <button type="button" class="btn-icon" aria-label="Actions for {{ $propertyType->name }}">
+                            <button type="button" class="btn-icon" aria-label="{{ __('messages.actions_for', ['name' => $propertyType->name]) }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                 </svg>
@@ -64,10 +64,10 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-ui.dropdown-item :href="route('admin.property-types.show', $propertyType)">View Details</x-ui.dropdown-item>
+                            <x-ui.dropdown-item :href="route('admin.property-types.show', $propertyType)">{{ __('properties.view_details') }}</x-ui.dropdown-item>
 
                             @can('update', $propertyType)
-                                <x-ui.dropdown-item :href="route('admin.property-types.edit', $propertyType)">Edit</x-ui.dropdown-item>
+                                <x-ui.dropdown-item :href="route('admin.property-types.edit', $propertyType)">{{ __('messages.edit') }}</x-ui.dropdown-item>
                             @endcan
 
                             @can('delete', $propertyType)
@@ -77,7 +77,7 @@
                                     class="text-danger hover:!text-danger"
                                     @click="confirmTarget = { url: '{{ route('admin.property-types.destroy', $propertyType) }}', label: @js($propertyType->name) }; $dispatch('open-modal', 'delete-confirm')"
                                 >
-                                    Delete
+                                    {{ __('messages.delete') }}
                                 </x-ui.dropdown-item>
                             @endcan
                         </x-slot>

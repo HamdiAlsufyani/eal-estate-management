@@ -16,7 +16,7 @@ class UpdatePropertyTypeRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'slug' => Str::slug($this->input('slug') ?: $this->input('name')),
+            'slug' => Str::slug($this->input('slug') ?: $this->input('name_en')),
         ]);
     }
 
@@ -28,7 +28,8 @@ class UpdatePropertyTypeRequest extends FormRequest
         $propertyType = $this->route('property_type');
 
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name')->ignore($propertyType->id)],
+            'name_en' => ['required', 'string', 'max:255', Rule::unique('property_types', 'name_en')->ignore($propertyType->id)],
+            'name_ar' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('property_types', 'slug')->ignore($propertyType->id)],
             'icon' => ['nullable', 'string', 'max:255'],
             'is_active' => ['boolean'],

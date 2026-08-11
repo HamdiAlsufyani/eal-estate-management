@@ -21,11 +21,15 @@ class CityService
 
     public function create(array $data): City
     {
+        $data['name'] = $data['name_en'];
+
         return DB::transaction(fn () => City::create($data));
     }
 
     public function update(City $city, array $data): City
     {
+        $data['name'] = $data['name_en'];
+
         DB::transaction(fn () => $city->update($data));
 
         return $city;

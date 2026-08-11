@@ -16,7 +16,7 @@ class StoreCityRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'slug' => Str::slug($this->input('slug') ?: $this->input('name')),
+            'slug' => Str::slug($this->input('slug') ?: $this->input('name_en')),
         ]);
     }
 
@@ -26,7 +26,8 @@ class StoreCityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:cities,name'],
+            'name_en' => ['required', 'string', 'max:255', 'unique:cities,name_en'],
+            'name_ar' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'unique:cities,slug'],
             'is_active' => ['boolean'],
         ];

@@ -31,7 +31,7 @@ class DistrictController extends Controller
 
         return view('admin.districts.index', [
             'districts' => $this->districts->paginate($filters),
-            'cities' => City::query()->orderBy('name')->pluck('name', 'id'),
+            'cities' => City::query()->orderBy('name_en')->get()->pluck('name', 'id'),
             'filters' => $filters,
         ]);
     }
@@ -110,7 +110,8 @@ class DistrictController extends Controller
         abort_unless($request->user()->can('properties.view'), 403);
 
         return response()->json(
-            $city->districts()->orderBy('name')->get(['id', 'name'])
+            $city->districts()->orderBy('name_en')->get(['id', 'name_en', 'name_ar'])
+                ->map(fn ($district) => ['id' => $district->id, 'name' => $district->name])
         );
     }
 
@@ -124,7 +125,8 @@ class DistrictController extends Controller
                     $query->orWhere('id', $currentCityId);
                 }
             })
-            ->orderBy('name')
+            ->orderBy('name_en')
+            ->get()
             ->pluck('name', 'id');
     }
 }

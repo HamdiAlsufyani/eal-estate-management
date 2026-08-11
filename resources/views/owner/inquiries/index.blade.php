@@ -2,27 +2,28 @@
     $statusVariants = ['new' => 'info', 'read' => 'gray', 'closed' => 'success'];
 @endphp
 
-<x-owner-layout title="Inquiries" :breadcrumbs="[['label' => 'Inquiries']]">
+<x-owner-layout title="{{ __('navigation.inquiries') }}" :breadcrumbs="[['label' => __('navigation.inquiries')]]">
     <x-slot name="header">
         <div>
-            <h1 class="text-xl font-semibold text-text">Inquiries</h1>
-            <p class="text-sm text-text-muted">Messages from people interested in your properties.</p>
+            <h1 class="text-xl font-semibold text-text">{{ __('navigation.inquiries') }}</h1>
+            <p class="text-sm text-text-muted">{{ __('inquiries.owner_subtitle') }}</p>
         </div>
     </x-slot>
 
     <div class="space-y-6">
         <x-ui.card>
             @if ($inquiries->isEmpty())
-                <x-ui.empty-state title="No inquiries yet" description="Inquiries about your properties will appear here." />
+                <x-ui.empty-state title="{{ __('inquiries.no_inquiries') }}" description="{{ __('inquiries.no_inquiries_hint') }}" />
             @else
                 <x-ui.table>
                     <x-slot name="head">
-                        <th>Property</th>
-                        <th>From</th>
-                        <th class="hidden md:table-cell">Phone</th>
-                        <th>Message</th>
-                        <th>Status</th>
-                        <th class="hidden lg:table-cell">Date</th>
+                        <th>{{ __('inquiries.property') }}</th>
+                        <th>{{ __('inquiries.from') }}</th>
+                        <th class="hidden md:table-cell">{{ __('inquiries.phone') }}</th>
+                        <th>{{ __('inquiries.message') }}</th>
+                        <th>{{ __('messages.status') }}</th>
+                        <th class="hidden lg:table-cell">{{ __('inquiries.date') }}</th>
+                        <th class="text-right">{{ __('messages.actions') }}</th>
                     </x-slot>
 
                     @foreach ($inquiries as $inquiry)
@@ -40,9 +41,12 @@
                             <td class="hidden md:table-cell text-text-muted">{{ $inquiry->phone }}</td>
                             <td class="max-w-xs truncate text-text-muted">{{ $inquiry->message }}</td>
                             <td>
-                                <x-ui.badge :variant="$statusVariants[$inquiry->status] ?? 'gray'">{{ ucfirst($inquiry->status) }}</x-ui.badge>
+                                <x-ui.badge :variant="$statusVariants[$inquiry->status] ?? 'gray'">{{ __('inquiries.status.' . $inquiry->status) }}</x-ui.badge>
                             </td>
                             <td class="hidden lg:table-cell text-text-muted">{{ $inquiry->created_at->format('M j, Y') }}</td>
+                            <td class="text-right">
+                                <x-ui.button :href="route('owner.inquiries.show', $inquiry)" variant="outline" size="sm">{{ __('messages.view') }}</x-ui.button>
+                            </td>
                         </tr>
                     @endforeach
                 </x-ui.table>

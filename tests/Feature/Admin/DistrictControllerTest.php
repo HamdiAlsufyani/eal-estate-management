@@ -21,10 +21,10 @@ test('admin can create a district belonging to a city', function () {
 
     $response = $this->actingAs($admin)->post(route('admin.districts.store'), [
         'city_id' => $city->id,
-        'name' => 'Al Olaya',
+        'name_en' => 'Al Olaya',
     ]);
 
-    $district = District::firstWhere('name', 'Al Olaya');
+    $district = District::firstWhere('name_en', 'Al Olaya');
 
     $response->assertRedirect(route('admin.districts.show', $district));
     expect($district->city_id)->toBe($city->id);
@@ -39,9 +39,9 @@ test('duplicate district name in the same city is rejected', function () {
     $this->actingAs($admin)
         ->post(route('admin.districts.store'), [
             'city_id' => $city->id,
-            'name' => 'Al Olaya',
+            'name_en' => 'Al Olaya',
         ])
-        ->assertSessionHasErrors('name');
+        ->assertSessionHasErrors('name_en');
 
     expect(District::where('city_id', $city->id)->where('name', 'Al Olaya')->count())->toBe(1);
 });
@@ -55,7 +55,7 @@ test('same district name in different cities is allowed', function () {
     $this->actingAs($admin)
         ->post(route('admin.districts.store'), [
             'city_id' => $jeddah->id,
-            'name' => 'Al Olaya',
+            'name_en' => 'Al Olaya',
         ])
         ->assertSessionHasNoErrors();
 

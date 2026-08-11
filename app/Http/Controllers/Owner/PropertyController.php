@@ -50,7 +50,7 @@ class PropertyController extends Controller
 
         return redirect()
             ->route('owner.properties.show', $property)
-            ->with('success', 'Property created successfully.');
+            ->with('success', __('messages.property_created'));
     }
 
     public function show(Property $property): View
@@ -88,7 +88,7 @@ class PropertyController extends Controller
 
         return redirect()
             ->route('owner.properties.show', $property)
-            ->with('success', 'Property updated successfully.');
+            ->with('success', __('messages.property_updated'));
     }
 
     public function destroy(Property $property): RedirectResponse
@@ -99,7 +99,7 @@ class PropertyController extends Controller
 
         return redirect()
             ->route('owner.properties.index')
-            ->with('success', 'Property deleted successfully.');
+            ->with('success', __('messages.property_deleted'));
     }
 
     public function destroyImage(Property $property, Media $media): RedirectResponse
@@ -110,7 +110,7 @@ class PropertyController extends Controller
 
         $media->delete();
 
-        return back()->with('success', 'Images updated successfully.');
+        return back()->with('success', __('messages.image_removed'));
     }
 
     public function reorderImages(Request $request, Property $property): RedirectResponse
@@ -124,6 +124,6 @@ class PropertyController extends Controller
 
         $this->properties->reorderImages($property, $request->input('media'));
 
-        return back()->with('success', 'Images updated successfully.');
+        return back()->with('success', __('messages.image_order_updated'));
     }
 }

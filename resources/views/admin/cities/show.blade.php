@@ -1,14 +1,14 @@
-<x-admin-layout title="{{ $city->name }}" :breadcrumbs="[['label' => 'Cities', 'url' => route('admin.cities.index')], ['label' => $city->name]]">
+<x-admin-layout title="{{ $city->name }}" :breadcrumbs="[['label' => __('navigation.cities'), 'url' => route('admin.cities.index')], ['label' => $city->name]]">
     <x-slot name="header">
         <div class="flex items-center justify-between gap-4">
             <div>
                 <h1 class="text-xl font-semibold text-text">{{ $city->name }}</h1>
-                <p class="text-sm text-text-muted">City details and usage.</p>
+                <p class="text-sm text-text-muted">{{ __('properties.city_details_subtitle') }}</p>
             </div>
 
             <div class="hidden items-center gap-2 sm:flex">
                 @can('update', $city)
-                    <x-ui.button :href="route('admin.cities.edit', $city)" variant="outline" size="sm">Edit</x-ui.button>
+                    <x-ui.button :href="route('admin.cities.edit', $city)" variant="outline" size="sm">{{ __('messages.edit') }}</x-ui.button>
                 @endcan
             </div>
         </div>
@@ -38,18 +38,18 @@
 
                     <div class="mt-3">
                         <x-ui.badge :variant="$city->is_active ? 'success' : 'gray'">
-                            {{ $city->is_active ? 'Active' : 'Inactive' }}
+                            {{ $city->is_active ? __('messages.active') : __('messages.inactive') }}
                         </x-ui.badge>
                     </div>
                 </div>
 
                 <dl class="mt-6 space-y-4 border-t border-border pt-6 text-sm">
                     <div class="flex items-center justify-between">
-                        <dt class="text-text-muted">Created</dt>
+                        <dt class="text-text-muted">{{ __('properties.created') }}</dt>
                         <dd class="font-medium text-text">{{ $city->created_at->format('M j, Y') }}</dd>
                     </div>
                     <div class="flex items-center justify-between">
-                        <dt class="text-text-muted">Last Updated</dt>
+                        <dt class="text-text-muted">{{ __('properties.last_updated') }}</dt>
                         <dd class="font-medium text-text">{{ $city->updated_at->format('M j, Y') }}</dd>
                     </div>
                 </dl>
@@ -58,7 +58,7 @@
             {{-- Stats + Actions --}}
             <div class="space-y-6 lg:col-span-2">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <x-ui.stat-card label="Districts" :value="number_format($city->districts_count)" variant="primary">
+                    <x-ui.stat-card label="{{ __('navigation.districts') }}" :value="number_format($city->districts_count)" variant="primary">
                         <x-slot name="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.159.69.159 1.006 0Z" />
@@ -66,7 +66,7 @@
                         </x-slot>
                     </x-ui.stat-card>
 
-                    <x-ui.stat-card label="Properties" :value="number_format($city->properties_count)" variant="secondary">
+                    <x-ui.stat-card label="{{ __('properties.title') }}" :value="number_format($city->properties_count)" variant="secondary">
                         <x-slot name="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12 11.204 3.045c.44-.44 1.152-.44 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
@@ -75,16 +75,19 @@
                     </x-ui.stat-card>
                 </div>
 
-                <x-ui.card title="Actions">
+                <x-ui.card title="{{ __('messages.actions') }}">
                     <div class="flex flex-wrap gap-3">
                         @can('update', $city)
-                            <x-ui.button :href="route('admin.cities.edit', $city)" variant="outline" size="sm">Edit City</x-ui.button>
+                            <x-ui.button :href="route('admin.cities.edit', $city)" variant="outline" size="sm">{{ __('properties.edit_city') }}</x-ui.button>
                         @endcan
 
                         @can('delete', $city)
                             @if ($city->districts_count > 0 || $city->properties_count > 0)
                                 <p class="text-sm text-text-muted">
-                                    This city has {{ number_format($city->districts_count) }} district(s) and {{ number_format($city->properties_count) }} propert{{ $city->properties_count === 1 ? 'y' : 'ies' }} assigned and cannot be deleted. Deactivate it instead to hide it from new listings.
+                                    {{ __('properties.city_cannot_delete', [
+                                        'districts' => trans_choice('properties.district_count', $city->districts_count, ['count' => number_format($city->districts_count)]),
+                                        'properties' => trans_choice('properties.property_count', $city->properties_count, ['count' => number_format($city->properties_count)]),
+                                    ]) }}
                                 </p>
                             @else
                                 <x-ui.button
@@ -94,7 +97,7 @@
                                     class="ml-auto"
                                     @click="$dispatch('open-modal', 'delete-city')"
                                 >
-                                    Delete City
+                                    {{ __('properties.delete_city') }}
                                 </x-ui.button>
                             @endif
                         @endcan
@@ -107,16 +110,16 @@
             @if ($city->districts_count === 0 && $city->properties_count === 0)
                 <x-ui.modal name="delete-city" max-width="md">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-text">Delete City</h3>
+                        <h3 class="text-lg font-semibold text-text">{{ __('properties.delete_city') }}</h3>
                         <p class="mt-2 text-sm text-text-muted">
-                            Are you sure you want to delete <span class="font-medium text-text">{{ $city->name }}</span>? This action cannot be undone.
+                            {{ __('messages.delete_confirm_prefix') }} <span class="font-medium text-text">{{ $city->name }}</span>{{ __('messages.delete_confirm_suffix') }}
                         </p>
 
                         <div class="mt-6 flex justify-end gap-3">
-                            <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-city')">Cancel</x-ui.button>
+                            <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-city')">{{ __('messages.cancel') }}</x-ui.button>
                             <form method="POST" action="{{ route('admin.cities.destroy', $city) }}">
                                 @csrf @method('DELETE')
-                                <x-ui.button type="submit" variant="danger">Delete</x-ui.button>
+                                <x-ui.button type="submit" variant="danger">{{ __('messages.delete') }}</x-ui.button>
                             </form>
                         </div>
                     </div>

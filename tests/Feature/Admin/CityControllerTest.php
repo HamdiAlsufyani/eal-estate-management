@@ -28,11 +28,11 @@ test('admin can create a city with an auto-generated slug', function () {
     $admin = adminUser(['cities.view', 'cities.create']);
 
     $response = $this->actingAs($admin)->post(route('admin.cities.store'), [
-        'name' => 'Dammam Central',
+        'name_en' => 'Dammam Central',
         'is_active' => 1,
     ]);
 
-    $city = City::firstWhere('name', 'Dammam Central');
+    $city = City::firstWhere('name_en', 'Dammam Central');
 
     $response->assertRedirect(route('admin.cities.show', $city));
     expect($city->slug)->toBe('dammam-central');
@@ -43,7 +43,7 @@ test('admin can update a city', function () {
     $city = City::factory()->create(['name' => 'Riyadh', 'slug' => 'riyadh']);
 
     $response = $this->actingAs($admin)->put(route('admin.cities.update', $city), [
-        'name' => 'Riyadh',
+        'name_en' => 'Riyadh',
         'slug' => 'riyadh',
         'is_active' => 0,
     ]);

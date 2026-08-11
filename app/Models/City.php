@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasLocalizedName;
 use App\Policies\CityPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,10 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 #[UsePolicy(CityPolicy::class)]
 class City extends Model
 {
-    use HasFactory;
+    use HasFactory, HasLocalizedName;
 
     protected $fillable = [
         'name',
+        'name_en',
+        'name_ar',
         'slug',
         'is_active',
     ];
@@ -47,24 +50,5 @@ class City extends Model
             in_array($status, ['active', 'inactive'], true),
             fn (Builder $query) => $query->where('is_active', $status === 'active')
         );
-    }
-
-    public function scopeSearch($query, ?string $term)
-    {
-        return $query->when($term, fn (Builder $query) => $query->where(
-            fn (Builder $query) => $query
-                ->where('name', 'like', "%{$term}%")
-                ->orWhere('slug', 'like', "%{$term}%")
-        ));
-    }
-
-    public function scopeSort($query, ?string $sort)
-    {
-        return match ($sort) {
-            'oldest' => $query->oldest(),
-            'name_asc' => $query->orderBy('name'),
-            'name_desc' => $query->orderByDesc('name'),
-            default => $query->latest(),
-        };
     }
 }

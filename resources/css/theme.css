@@ -48,11 +48,16 @@
 
     /* Font */
     --font-sans: 'Figtree', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-arabic: 'Tajawal', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
     body {
         @apply bg-background text-text antialiased;
+    }
+
+    .font-arabic {
+        font-family: var(--font-arabic);
     }
 
     ::selection {
@@ -171,7 +176,7 @@
     }
 
     .table thead th {
-        @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-muted whitespace-nowrap;
+        @apply px-4 py-3 text-start text-xs font-semibold uppercase tracking-wide text-text-muted whitespace-nowrap;
     }
 
     .table tbody {
@@ -257,7 +262,7 @@
     }
 
     .dropdown-item {
-        @apply flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-text
+        @apply flex w-full items-center gap-2 px-4 py-2.5 text-start text-sm text-text
                transition-colors duration-150 hover:bg-primary/5 hover:text-primary;
     }
 
@@ -268,6 +273,24 @@
     /* ----------------------------------------------------------------
      * Sidebar / Navbar
      * ------------------------------------------------------------- */
+    .sidebar-panel {
+        @apply fixed inset-y-0 start-0 z-40 flex w-72 flex-col bg-primary
+               transition-transform duration-200 ease-out
+               lg:sticky lg:top-0 lg:h-screen lg:translate-x-0;
+    }
+
+    .sidebar-panel.is-open {
+        @apply translate-x-0;
+    }
+
+    .sidebar-panel.is-closed {
+        transform: translateX(-100%);
+    }
+
+    [dir='rtl'] .sidebar-panel.is-closed {
+        transform: translateX(100%);
+    }
+
     .sidebar-link {
         @apply flex items-center gap-3 rounded-[var(--radius-control)] px-3.5 py-2.5 text-sm font-medium
                text-white/70 transition-all duration-150

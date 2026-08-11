@@ -15,23 +15,27 @@ class PropertyTypeSeeder extends Seeder
     public function run(): void
     {
         $types = [
-            'Apartment',
-            'Villa',
-            'House',
-            'Land',
-            'Office',
-            'Shop',
-            'Warehouse',
-            'Building',
-            'Farm',
-            'Other',
+            'Apartment' => 'شقة',
+            'Villa' => 'فيلا',
+            'House' => 'منزل',
+            'Land' => 'أرض',
+            'Office' => 'مكتب',
+            'Shop' => 'محل تجاري',
+            'Warehouse' => 'مستودع',
+            'Building' => 'مبنى',
+            'Farm' => 'مزرعة',
+            'Other' => 'أخرى',
         ];
 
-        foreach ($types as $name) {
-            PropertyType::firstOrCreate(
-                ['slug' => Str::slug($name)],
-                ['name' => $name, 'is_active' => true]
+        foreach ($types as $nameEn => $nameAr) {
+            $propertyType = PropertyType::firstOrCreate(
+                ['slug' => Str::slug($nameEn)],
+                ['name' => $nameEn, 'name_en' => $nameEn, 'name_ar' => $nameAr, 'is_active' => true]
             );
+
+            if (! $propertyType->name_ar) {
+                $propertyType->update(['name_en' => $nameEn, 'name_ar' => $nameAr]);
+            }
         }
     }
 }

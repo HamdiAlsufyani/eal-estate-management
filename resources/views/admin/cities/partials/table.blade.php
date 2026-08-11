@@ -1,22 +1,22 @@
 @if ($cities->isEmpty())
-    <x-ui.empty-state title="No cities found" description="Try adjusting your search or filters, or create a new city.">
+    <x-ui.empty-state title="{{ __('properties.no_cities_found') }}" description="{{ __('properties.no_cities_found_hint') }}">
         <x-slot name="action">
             @can('create', \App\Models\City::class)
-                <x-ui.button :href="route('admin.cities.create')" variant="primary">Create City</x-ui.button>
+                <x-ui.button :href="route('admin.cities.create')" variant="primary">{{ __('properties.create_city') }}</x-ui.button>
             @endcan
         </x-slot>
     </x-ui.empty-state>
 @else
     <x-ui.table>
         <x-slot name="head">
-            <th class="w-14">ID</th>
-            <th>Name</th>
-            <th class="hidden md:table-cell">Slug</th>
-            <th>Districts</th>
-            <th>Properties</th>
-            <th>Status</th>
-            <th class="hidden lg:table-cell">Created</th>
-            <th class="text-right">Actions</th>
+            <th class="w-14">{{ __('messages.id') }}</th>
+            <th>{{ __('properties.name') }}</th>
+            <th class="hidden md:table-cell">{{ __('messages.slug') }}</th>
+            <th>{{ __('navigation.districts') }}</th>
+            <th>{{ __('properties.title') }}</th>
+            <th>{{ __('messages.status') }}</th>
+            <th class="hidden lg:table-cell">{{ __('properties.created') }}</th>
+            <th class="text-right">{{ __('messages.actions') }}</th>
         </x-slot>
 
         @foreach ($cities as $city)

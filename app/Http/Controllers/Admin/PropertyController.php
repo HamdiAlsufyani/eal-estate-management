@@ -42,8 +42,8 @@ class PropertyController extends Controller
         return view('admin.properties.index', [
             'properties' => $this->properties->paginate($filters, $actor),
             'filters' => $filters,
-            'propertyTypes' => PropertyType::query()->orderBy('name')->pluck('name', 'id'),
-            'cities' => City::query()->orderBy('name')->pluck('name', 'id'),
+            'propertyTypes' => PropertyType::query()->orderBy('name_en')->get()->pluck('name', 'id'),
+            'cities' => City::query()->orderBy('name_en')->get()->pluck('name', 'id'),
             'districts' => $this->properties->selectableDistricts(! empty($filters['city']) ? (int) $filters['city'] : null),
             'owners' => $actor->canManageAllProperties()
                 ? User::query()->role('Owner')->orderBy('name')->pluck('name', 'id')
@@ -65,7 +65,7 @@ class PropertyController extends Controller
 
         return redirect()
             ->route('admin.properties.show', $property)
-            ->with('success', "Property \"{$property->title}\" was created successfully.");
+            ->with('success', __('messages.property_created'));
     }
 
     public function show(Property $property): View
@@ -104,38 +104,45 @@ class PropertyController extends Controller
 
         return redirect()
             ->route('admin.properties.show', $property)
-            ->with('success', "Property \"{$property->title}\" was updated successfully.");
+            ->with('success', __('messages.property_updated'));
     }
 
     public function destroy(Property $property): RedirectResponse
     {
         $this->authorize('delete', $property);
 
-        $title = $property->title;
         $this->properties->delete($property);
 
         return redirect()
             ->route('admin.properties.index')
-            ->with('success', "Property \"{$title}\" was deleted successfully.");
+            ->with('success', __('messages.property_deleted'));
     }
 
     public function changeStatus(ChangePropertyStatusRequest $request, Property $property): RedirectResponse
     {
+        $status = $request->validated('status');
+
         $this->propertyStatus->changeStatus(
             $property,
-            $request->validated('status'),
+            $status,
             $request->validated('reason'),
             $request->user(),
         );
 
-        return back()->with('success', 'Property status was updated to "'.ucfirst($request->validated('status')).'".');
+        $message = match ($status) {
+            'approved' => __('messages.property_approved'),
+            'rejected' => __('messages.property_rejected'),
+            default => __('messages.property_status_updated'),
+        };
+
+        return back()->with('success', $message);
     }
 
     public function changeAvailability(ChangePropertyAvailabilityRequest $request, Property $property): RedirectResponse
     {
         $this->properties->changeAvailability($property, $request->validated('availability'));
 
-        return back()->with('success', 'Property availability was updated to "'.ucfirst($request->validated('availability')).'".');
+        return back()->with('success', __('messages.property_availability_updated'));
     }
 
     public function destroyImage(Property $property, Media $media): RedirectResponse
@@ -146,7 +153,7 @@ class PropertyController extends Controller
 
         $media->delete();
 
-        return back()->with('success', 'Image removed.');
+        return back()->with('success', __('messages.image_removed'));
     }
 
     public function reorderImages(Request $request, Property $property): RedirectResponse
@@ -160,6 +167,6 @@ class PropertyController extends Controller
 
         $this->properties->reorderImages($property, $request->input('media'));
 
-        return back()->with('success', 'Image order updated.');
+        return back()->with('success', __('messages.image_order_updated'));
     }
 }

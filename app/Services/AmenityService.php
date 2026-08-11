@@ -21,11 +21,15 @@ class AmenityService
 
     public function create(array $data): Amenity
     {
+        $data['name'] = $data['name_en'];
+
         return DB::transaction(fn () => Amenity::create($data));
     }
 
     public function update(Amenity $amenity, array $data): Amenity
     {
+        $data['name'] = $data['name_en'];
+
         DB::transaction(fn () => $amenity->update($data));
 
         return $amenity;

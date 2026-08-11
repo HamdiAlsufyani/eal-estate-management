@@ -47,11 +47,15 @@ class PropertyService
             $images = $data['images'] ?? [];
             unset($data['amenities'], $data['images'], $data['availability']);
 
+            $data['title'] = $data['title_en'];
+            $data['description'] = $data['description_en'];
+            $data['address'] = $data['address_en'];
+
             $data['user_id'] = $this->resolveOwnerId($data, $actor);
             $data['status'] = $this->resolveInitialStatus($data, $actor);
             $data['featured'] = $this->resolveFeatured($data, $actor, $data['status']);
             $data['rent_period'] = $data['purpose'] === 'rent' ? ($data['rent_period'] ?? null) : null;
-            $data['slug'] = $this->uniqueSlug($data['title']);
+            $data['slug'] = $this->uniqueSlug($data['title_en']);
 
             $property = Property::create($data);
 
@@ -76,6 +80,10 @@ class PropertyService
             $amenityIds = $data['amenities'] ?? null;
             $images = $data['images'] ?? [];
             unset($data['amenities'], $data['images'], $data['status']);
+
+            $data['title'] = $data['title_en'];
+            $data['description'] = $data['description_en'];
+            $data['address'] = $data['address_en'];
 
             if ($actor->can('properties.assign_owner') && ! empty($data['user_id'])) {
                 // keep the requested owner
@@ -103,8 +111,8 @@ class PropertyService
                 $data['rent_period'] = null;
             }
 
-            if (isset($data['title']) && $data['title'] !== $property->title) {
-                $data['slug'] = $this->uniqueSlug($data['title'], $property->id);
+            if ($data['title_en'] !== $property->title_en) {
+                $data['slug'] = $this->uniqueSlug($data['title_en'], $property->id);
             }
 
             $property->update($data);
@@ -155,7 +163,8 @@ class PropertyService
     {
         return PropertyType::query()
             ->where(fn ($query) => $query->where('is_active', true)->when($currentId, fn ($q) => $q->orWhere('id', $currentId)))
-            ->orderBy('name')
+            ->orderBy('name_en')
+            ->get()
             ->pluck('name', 'id');
     }
 
@@ -166,7 +175,8 @@ class PropertyService
     {
         return City::query()
             ->where(fn ($query) => $query->where('is_active', true)->when($currentId, fn ($q) => $q->orWhere('id', $currentId)))
-            ->orderBy('name')
+            ->orderBy('name_en')
+            ->get()
             ->pluck('name', 'id');
     }
 
@@ -181,7 +191,8 @@ class PropertyService
 
         return District::query()
             ->where('city_id', $cityId)
-            ->orderBy('name')
+            ->orderBy('name_en')
+            ->get()
             ->pluck('name', 'id');
     }
 
@@ -197,7 +208,7 @@ class PropertyService
             'propertyTypes' => $this->selectablePropertyTypes($property?->property_type_id),
             'cities' => $this->selectableCities($property?->city_id),
             'districts' => $this->selectableDistricts($property?->city_id),
-            'amenities' => Amenity::active()->orderBy('name')->pluck('name', 'id'),
+            'amenities' => Amenity::active()->orderBy('name_en')->get()->pluck('name', 'id'),
             'owners' => $actor->can('properties.assign_owner')
                 ? User::query()->role('Owner')->orderBy('name')->pluck('name', 'id')
                 : collect(),

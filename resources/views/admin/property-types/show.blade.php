@@ -1,14 +1,14 @@
-<x-admin-layout title="{{ $propertyType->name }}" :breadcrumbs="[['label' => 'Property Types', 'url' => route('admin.property-types.index')], ['label' => $propertyType->name]]">
+<x-admin-layout title="{{ $propertyType->name }}" :breadcrumbs="[['label' => __('navigation.property_types'), 'url' => route('admin.property-types.index')], ['label' => $propertyType->name]]">
     <x-slot name="header">
         <div class="flex items-center justify-between gap-4">
             <div>
                 <h1 class="text-xl font-semibold text-text">{{ $propertyType->name }}</h1>
-                <p class="text-sm text-text-muted">Property type details and usage.</p>
+                <p class="text-sm text-text-muted">{{ __('properties.property_type_details_subtitle') }}</p>
             </div>
 
             <div class="hidden items-center gap-2 sm:flex">
                 @can('update', $propertyType)
-                    <x-ui.button :href="route('admin.property-types.edit', $propertyType)" variant="outline" size="sm">Edit</x-ui.button>
+                    <x-ui.button :href="route('admin.property-types.edit', $propertyType)" variant="outline" size="sm">{{ __('messages.edit') }}</x-ui.button>
                 @endcan
             </div>
         </div>
@@ -42,22 +42,22 @@
 
                     <div class="mt-3">
                         <x-ui.badge :variant="$propertyType->is_active ? 'success' : 'gray'">
-                            {{ $propertyType->is_active ? 'Active' : 'Inactive' }}
+                            {{ $propertyType->is_active ? __('messages.active') : __('messages.inactive') }}
                         </x-ui.badge>
                     </div>
                 </div>
 
                 <dl class="mt-6 space-y-4 border-t border-border pt-6 text-sm">
                     <div class="flex items-center justify-between">
-                        <dt class="text-text-muted">Icon</dt>
+                        <dt class="text-text-muted">{{ __('messages.icon') }}</dt>
                         <dd class="font-medium text-text">{{ $propertyType->icon ?? '—' }}</dd>
                     </div>
                     <div class="flex items-center justify-between">
-                        <dt class="text-text-muted">Created</dt>
+                        <dt class="text-text-muted">{{ __('properties.created') }}</dt>
                         <dd class="font-medium text-text">{{ $propertyType->created_at->format('M j, Y') }}</dd>
                     </div>
                     <div class="flex items-center justify-between">
-                        <dt class="text-text-muted">Last Updated</dt>
+                        <dt class="text-text-muted">{{ __('properties.last_updated') }}</dt>
                         <dd class="font-medium text-text">{{ $propertyType->updated_at->format('M j, Y') }}</dd>
                     </div>
                 </dl>
@@ -66,7 +66,7 @@
             {{-- Stats + Actions --}}
             <div class="space-y-6 lg:col-span-2">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <x-ui.stat-card label="Total Properties" :value="number_format($propertyType->properties_count)" variant="primary">
+                    <x-ui.stat-card label="{{ __('dashboard.total_properties') }}" :value="number_format($propertyType->properties_count)" variant="primary">
                         <x-slot name="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12 11.204 3.045c.44-.44 1.152-.44 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
@@ -74,7 +74,7 @@
                         </x-slot>
                     </x-ui.stat-card>
 
-                    <x-ui.stat-card label="Active Properties" :value="number_format($propertyType->active_properties_count)" variant="success">
+                    <x-ui.stat-card label="{{ __('properties.active_properties') }}" :value="number_format($propertyType->active_properties_count)" variant="success">
                         <x-slot name="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -82,7 +82,7 @@
                         </x-slot>
                     </x-ui.stat-card>
 
-                    <x-ui.stat-card label="Inactive Properties" :value="number_format($propertyType->properties_count - $propertyType->active_properties_count)" variant="warning">
+                    <x-ui.stat-card label="{{ __('properties.inactive_properties') }}" :value="number_format($propertyType->properties_count - $propertyType->active_properties_count)" variant="warning">
                         <x-slot name="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -91,16 +91,16 @@
                     </x-ui.stat-card>
                 </div>
 
-                <x-ui.card title="Actions">
+                <x-ui.card title="{{ __('messages.actions') }}">
                     <div class="flex flex-wrap gap-3">
                         @can('update', $propertyType)
-                            <x-ui.button :href="route('admin.property-types.edit', $propertyType)" variant="outline" size="sm">Edit Property Type</x-ui.button>
+                            <x-ui.button :href="route('admin.property-types.edit', $propertyType)" variant="outline" size="sm">{{ __('properties.edit_property_type') }}</x-ui.button>
                         @endcan
 
                         @can('delete', $propertyType)
                             @if ($propertyType->properties_count > 0)
                                 <p class="text-sm text-text-muted">
-                                    This property type has {{ number_format($propertyType->properties_count) }} propert{{ $propertyType->properties_count === 1 ? 'y' : 'ies' }} assigned and cannot be deleted. Deactivate it instead to hide it from new listings.
+                                    {{ __('properties.type_cannot_delete', ['properties' => trans_choice('properties.property_count', $propertyType->properties_count, ['count' => number_format($propertyType->properties_count)])]) }}
                                 </p>
                             @else
                                 <x-ui.button
@@ -110,7 +110,7 @@
                                     class="ml-auto"
                                     @click="$dispatch('open-modal', 'delete-property-type')"
                                 >
-                                    Delete Property Type
+                                    {{ __('properties.delete_property_type') }}
                                 </x-ui.button>
                             @endif
                         @endcan
@@ -123,16 +123,16 @@
             @if ($propertyType->properties_count === 0)
                 <x-ui.modal name="delete-property-type" max-width="md">
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-text">Delete Property Type</h3>
+                        <h3 class="text-lg font-semibold text-text">{{ __('properties.delete_property_type') }}</h3>
                         <p class="mt-2 text-sm text-text-muted">
-                            Are you sure you want to delete <span class="font-medium text-text">{{ $propertyType->name }}</span>? This action cannot be undone.
+                            {{ __('messages.delete_confirm_prefix') }} <span class="font-medium text-text">{{ $propertyType->name }}</span>{{ __('messages.delete_confirm_suffix') }}
                         </p>
 
                         <div class="mt-6 flex justify-end gap-3">
-                            <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-property-type')">Cancel</x-ui.button>
+                            <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-property-type')">{{ __('messages.cancel') }}</x-ui.button>
                             <form method="POST" action="{{ route('admin.property-types.destroy', $propertyType) }}">
                                 @csrf @method('DELETE')
-                                <x-ui.button type="submit" variant="danger">Delete</x-ui.button>
+                                <x-ui.button type="submit" variant="danger">{{ __('messages.delete') }}</x-ui.button>
                             </form>
                         </div>
                     </div>

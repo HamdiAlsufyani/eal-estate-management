@@ -16,7 +16,7 @@ class UpdateAmenityRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'slug' => Str::slug($this->input('slug') ?: $this->input('name')),
+            'slug' => Str::slug($this->input('slug') ?: $this->input('name_en')),
         ]);
     }
 
@@ -28,7 +28,8 @@ class UpdateAmenityRequest extends FormRequest
         $amenity = $this->route('amenity');
 
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('amenities', 'name')->ignore($amenity->id)],
+            'name_en' => ['required', 'string', 'max:255', Rule::unique('amenities', 'name_en')->ignore($amenity->id)],
+            'name_ar' => ['nullable', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', Rule::unique('amenities', 'slug')->ignore($amenity->id)],
             'icon' => ['nullable', 'string', 'max:255'],
             'is_active' => ['boolean'],

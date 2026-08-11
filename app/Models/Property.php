@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Policies\PropertyPolicy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,6 +30,27 @@ class Property extends Model implements HasMedia
             'featured' => 'boolean',
             'published_at' => 'datetime',
         ];
+    }
+
+    protected function title(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->attributes['title_' . app()->getLocale()] ?: $this->attributes['title_en']
+        );
+    }
+
+    protected function description(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->attributes['description_' . app()->getLocale()] ?: $this->attributes['description_en']
+        );
+    }
+
+    protected function address(): Attribute
+    {
+        return Attribute::get(
+            fn () => $this->attributes['address_' . app()->getLocale()] ?: $this->attributes['address_en']
+        );
     }
 
     public function registerMediaCollections(): void
@@ -120,12 +142,18 @@ class Property extends Model implements HasMedia
     {
         return $query->when($term, fn (Builder $query) => $query->where(
             fn (Builder $query) => $query
-                ->where('title', 'like', "%{$term}%")
-                ->orWhere('description', 'like', "%{$term}%")
-                ->orWhere('address', 'like', "%{$term}%")
+                ->where('title_en', 'like', "%{$term}%")
+                ->orWhere('title_ar', 'like', "%{$term}%")
+                ->orWhere('description_en', 'like', "%{$term}%")
+                ->orWhere('description_ar', 'like', "%{$term}%")
+                ->orWhere('address_en', 'like', "%{$term}%")
+                ->orWhere('address_ar', 'like', "%{$term}%")
                 ->orWhereHas('user', fn (Builder $query) => $query
                     ->where('name', 'like', "%{$term}%")
                     ->orWhere('email', 'like', "%{$term}%"))
+                ->orWhereHas('propertyType', fn (Builder $query) => $query
+                    ->where('name_en', 'like', "%{$term}%")
+                    ->orWhere('name_ar', 'like', "%{$term}%"))
         ));
     }
 
@@ -159,6 +187,50 @@ class Property extends Model implements HasMedia
         return $query->when($districtId, fn (Builder $query) => $query->where('district_id', $districtId));
     }
 
+    public function scopePriceFrom($query, $price)
+    {
+        return $query->when($price !== null && $price !== '', fn (Builder $query) => $query->where('price', '>=', $price));
+    }
+
+    public function scopePriceTo($query, $price)
+    {
+        return $query->when($price !== null && $price !== '', fn (Builder $query) => $query->where('price', '<=', $price));
+    }
+
+    public function scopeAreaFrom($query, $area)
+    {
+        return $query->when($area !== null && $area !== '', fn (Builder $query) => $query->where('area', '>=', $area));
+    }
+
+    public function scopeAreaTo($query, $area)
+    {
+        return $query->when($area !== null && $area !== '', fn (Builder $query) => $query->where('area', '<=', $area));
+    }
+
+    public function scopeMinBedrooms($query, $bedrooms)
+    {
+        return $query->when($bedrooms !== null && $bedrooms !== '', fn (Builder $query) => $query->where('bedrooms', '>=', $bedrooms));
+    }
+
+    public function scopeMinBathrooms($query, $bathrooms)
+    {
+        return $query->when($bathrooms !== null && $bathrooms !== '', fn (Builder $query) => $query->where('bathrooms', '>=', $bathrooms));
+    }
+
+    public function scopeFurnishedIs($query, $furnished)
+    {
+        return $query->when($furnished !== null && $furnished !== '', fn (Builder $query) => $query->where('furnished', (bool) $furnished));
+    }
+
+    public function scopeHasAmenities($query, ?array $amenityIds)
+    {
+        return $query->when(! empty($amenityIds), function (Builder $query) use ($amenityIds) {
+            foreach ($amenityIds as $amenityId) {
+                $query->whereHas('amenities', fn (Builder $q) => $q->where('amenities.id', $amenityId));
+            }
+        });
+    }
+
     public function scopeOwnedBy($query, $userId)
     {
         return $query->when($userId, fn (Builder $query) => $query->where('user_id', $userId));
@@ -178,8 +250,8 @@ class Property extends Model implements HasMedia
             'price_asc' => $query->orderBy('price'),
             'price_desc' => $query->orderByDesc('price'),
             'most_viewed' => $query->withCount('views')->orderByDesc('views_count'),
-            'title_asc' => $query->orderBy('title'),
-            'title_desc' => $query->orderByDesc('title'),
+            'title_asc' => $query->orderBy('title_en'),
+            'title_desc' => $query->orderByDesc('title_en'),
             default => $query->latest(),
         };
     }

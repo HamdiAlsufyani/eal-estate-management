@@ -1,9 +1,9 @@
-<x-admin-layout title="Properties" :breadcrumbs="[['label' => 'Properties']]">
+<x-admin-layout title="{{ __('properties.title') }}" :breadcrumbs="[['label' => __('properties.title')]]">
     <x-slot name="header">
         <div class="flex items-center justify-between gap-4">
             <div>
-                <h1 class="text-xl font-semibold text-text">Properties</h1>
-                <p class="text-sm text-text-muted">Review property listings and manage their approval status.</p>
+                <h1 class="text-xl font-semibold text-text">{{ __('properties.title') }}</h1>
+                <p class="text-sm text-text-muted">{{ __('properties.review_subtitle') }}</p>
             </div>
 
             @can('create', \App\Models\Property::class)
@@ -11,7 +11,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
-                    New Property
+                    {{ __('properties.add_property') }}
                 </x-ui.button>
             @endcan
         </div>

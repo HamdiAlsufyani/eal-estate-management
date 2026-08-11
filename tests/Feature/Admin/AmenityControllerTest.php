@@ -28,12 +28,12 @@ test('admin can create an amenity with an auto-generated slug', function () {
     $admin = adminUser(['amenities.view', 'amenities.create']);
 
     $response = $this->actingAs($admin)->post(route('admin.amenities.store'), [
-        'name' => 'Swimming Pool',
+        'name_en' => 'Swimming Pool',
         'icon' => 'pool',
         'is_active' => 1,
     ]);
 
-    $amenity = Amenity::firstWhere('name', 'Swimming Pool');
+    $amenity = Amenity::firstWhere('name_en', 'Swimming Pool');
 
     $response->assertRedirect(route('admin.amenities.show', $amenity));
     expect($amenity->slug)->toBe('swimming-pool');
@@ -44,7 +44,7 @@ test('admin can update an amenity', function () {
     $amenity = Amenity::factory()->create(['name' => 'Gym', 'slug' => 'gym']);
 
     $response = $this->actingAs($admin)->put(route('admin.amenities.update', $amenity), [
-        'name' => 'Gym',
+        'name_en' => 'Gym',
         'slug' => 'gym',
         'is_active' => 0,
     ]);

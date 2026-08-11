@@ -65,8 +65,27 @@ function adminUser(array $permissions = []): \App\Models\User
     return $user;
 }
 
+/**
+ * Legacy override keys ('title', 'description', 'address') are mapped onto
+ * their '_en' bilingual counterparts so existing test call sites keep working.
+ *
+ * @return array<string, mixed>
+ */
+function withBilingualOverrides(array $overrides, array $fields): array
+{
+    foreach ($fields as $field) {
+        if (array_key_exists($field, $overrides) && ! array_key_exists("{$field}_en", $overrides)) {
+            $overrides["{$field}_en"] = $overrides[$field];
+        }
+    }
+
+    return $overrides;
+}
+
 function makeProperty(array $overrides = []): \App\Models\Property
 {
+    $overrides = withBilingualOverrides($overrides, ['title', 'description', 'address']);
+
     $city = $overrides['city_id'] ?? null;
     $district = $overrides['district_id'] ?? null;
 
@@ -78,37 +97,46 @@ function makeProperty(array $overrides = []): \App\Models\Property
         $district = \App\Models\District::factory()->create(['city_id' => $city])->id;
     }
 
+    $title = 'Test Property '.uniqid();
+    $description = 'A lovely test property.';
+    $address = '123 Test Street';
+
     return \App\Models\Property::create(array_merge([
         'user_id' => activeUser()->id,
         'property_type_id' => \App\Models\PropertyType::factory()->create()->id,
         'city_id' => $city,
         'district_id' => $district,
-        'title' => 'Test Property '.uniqid(),
+        'title' => $title,
+        'title_en' => $title,
         'slug' => 'test-property-'.uniqid(),
-        'description' => 'A lovely test property.',
+        'description' => $description,
+        'description_en' => $description,
         'purpose' => 'sale',
         'price' => 500000,
         'area' => 120,
-        'address' => '123 Test Street',
+        'address' => $address,
+        'address_en' => $address,
         'status' => 'approved',
     ], $overrides));
 }
 
 function propertyPayload(array $overrides = []): array
 {
+    $overrides = withBilingualOverrides($overrides, ['title', 'description', 'address']);
+
     $city = $overrides['city_id'] ?? \App\Models\City::factory()->create()->id;
     $district = $overrides['district_id'] ?? \App\Models\District::factory()->create(['city_id' => $city])->id;
 
     return array_merge([
-        'title' => 'Test Listing '.uniqid(),
-        'description' => 'A lovely place to live.',
+        'title_en' => 'Test Listing '.uniqid(),
+        'description_en' => 'A lovely place to live.',
         'property_type_id' => \App\Models\PropertyType::factory()->create()->id,
         'city_id' => $city,
         'district_id' => $district,
         'purpose' => 'sale',
         'price' => 350000,
         'area' => 150,
-        'address' => '456 Sample Ave',
+        'address_en' => '456 Sample Ave',
         'bedrooms' => 3,
         'bathrooms' => 2,
     ], $overrides);

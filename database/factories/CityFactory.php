@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
@@ -22,9 +23,19 @@ class CityFactory extends Factory
 
         return [
             'name' => $name,
+            'name_en' => $name,
             'slug' => Str::slug($name),
             'is_active' => true,
         ];
+    }
+
+    public function create($attributes = [], ?Model $parent = null)
+    {
+        if (isset($attributes['name']) && ! isset($attributes['name_en'])) {
+            $attributes['name_en'] = $attributes['name'];
+        }
+
+        return parent::create($attributes, $parent);
     }
 
     public function inactive(): static

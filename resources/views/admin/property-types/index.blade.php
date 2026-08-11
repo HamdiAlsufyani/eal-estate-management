@@ -1,9 +1,9 @@
-<x-admin-layout title="Property Types" :breadcrumbs="[['label' => 'Property Types']]">
+<x-admin-layout title="{{ __('navigation.property_types') }}" :breadcrumbs="[['label' => __('navigation.property_types')]]">
     <x-slot name="header">
         <div class="flex items-center justify-between gap-4">
             <div>
-                <h1 class="text-xl font-semibold text-text">Property Types</h1>
-                <p class="text-sm text-text-muted">Manage the real estate categories available across the platform.</p>
+                <h1 class="text-xl font-semibold text-text">{{ __('navigation.property_types') }}</h1>
+                <p class="text-sm text-text-muted">{{ __('properties.property_types_subtitle') }}</p>
             </div>
 
             @can('create', \App\Models\PropertyType::class)
@@ -11,7 +11,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
-                    New Property Type
+                    {{ __('properties.new_property_type') }}
                 </x-ui.button>
             @endcan
         </div>
@@ -46,20 +46,19 @@
                     </svg>
                 </div>
 
-                <h3 class="mt-4 text-lg font-semibold text-text">Delete Property Type</h3>
+                <h3 class="mt-4 text-lg font-semibold text-text">{{ __('properties.delete_property_type') }}</h3>
                 <p class="mt-2 text-sm text-text-muted">
-                    Are you sure you want to delete <span class="font-medium text-text" x-text="confirmTarget?.label"></span>?
-                    This action cannot be undone.
+                    {{ __('messages.delete_confirm_prefix') }} <span class="font-medium text-text" x-text="confirmTarget?.label"></span>{{ __('messages.delete_confirm_suffix') }}
                 </p>
 
                 <div class="mt-6 flex justify-end gap-3">
-                    <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-confirm')">Cancel</x-ui.button>
+                    <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-confirm')">{{ __('messages.cancel') }}</x-ui.button>
                     <x-ui.button
                         type="button"
                         variant="danger"
                         @click="$refs.singleDeleteForm.setAttribute('action', confirmTarget.url); $refs.singleDeleteForm.requestSubmit()"
                     >
-                        Delete
+                        {{ __('messages.delete') }}
                     </x-ui.button>
                 </div>
             </div>

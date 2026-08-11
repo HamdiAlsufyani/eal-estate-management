@@ -16,7 +16,7 @@ class UpdateDistrictRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'slug' => Str::slug($this->input('slug') ?: $this->input('name')),
+            'slug' => Str::slug($this->input('slug') ?: $this->input('name_en')),
         ]);
     }
 
@@ -29,14 +29,15 @@ class UpdateDistrictRequest extends FormRequest
 
         return [
             'city_id' => ['required', 'integer', 'exists:cities,id'],
-            'name' => [
+            'name_en' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('districts', 'name')
+                Rule::unique('districts', 'name_en')
                     ->where(fn ($query) => $query->where('city_id', $this->input('city_id')))
                     ->ignore($district->id),
             ],
+            'name_ar' => ['nullable', 'string', 'max:255'],
             'slug' => [
                 'required',
                 'string',
@@ -54,7 +55,7 @@ class UpdateDistrictRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.unique' => 'A district with this name already exists in the selected city.',
+            'name_en.unique' => 'A district with this name already exists in the selected city.',
             'slug.unique' => 'A district with this slug already exists in the selected city.',
         ];
     }
