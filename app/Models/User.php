@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(Inquiry::class);
     }
 
+    public function propertyViews()
+    {
+        return $this->hasMany(PropertyView::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', 'active');

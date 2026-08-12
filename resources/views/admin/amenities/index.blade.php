@@ -1,9 +1,9 @@
-<x-admin-layout title="Amenities" :breadcrumbs="[['label' => 'Amenities']]">
+<x-admin-layout title="{{ __('navigation.amenities') }}" :breadcrumbs="[['label' => __('navigation.amenities')]]">
     <x-slot name="header">
         <div class="flex items-center justify-between gap-4">
             <div>
-                <h1 class="text-xl font-semibold text-text">Amenities</h1>
-                <p class="text-sm text-text-muted">Manage the amenities that can be assigned to properties.</p>
+                <h1 class="text-xl font-semibold text-text">{{ __('navigation.amenities') }}</h1>
+                <p class="text-sm text-text-muted">{{ __('properties.amenities_subtitle') }}</p>
             </div>
 
             @can('create', \App\Models\Amenity::class)
@@ -11,7 +11,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
-                    New Amenity
+                    {{ __('properties.new_amenity') }}
                 </x-ui.button>
             @endcan
         </div>
@@ -46,20 +46,19 @@
                     </svg>
                 </div>
 
-                <h3 class="mt-4 text-lg font-semibold text-text">Delete Amenity</h3>
+                <h3 class="mt-4 text-lg font-semibold text-text">{{ __('properties.delete_amenity') }}</h3>
                 <p class="mt-2 text-sm text-text-muted">
-                    Are you sure you want to delete <span class="font-medium text-text" x-text="confirmTarget?.label"></span>?
-                    This action cannot be undone.
+                    {{ __('messages.delete_confirm_prefix') }} <span class="font-medium text-text" x-text="confirmTarget?.label"></span>{{ __('messages.delete_confirm_suffix') }}
                 </p>
 
                 <div class="mt-6 flex justify-end gap-3">
-                    <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-confirm')">Cancel</x-ui.button>
+                    <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-confirm')">{{ __('messages.cancel') }}</x-ui.button>
                     <x-ui.button
                         type="button"
                         variant="danger"
                         @click="$refs.singleDeleteForm.setAttribute('action', confirmTarget.url); $refs.singleDeleteForm.requestSubmit()"
                     >
-                        Delete
+                        {{ __('messages.delete') }}
                     </x-ui.button>
                 </div>
             </div>

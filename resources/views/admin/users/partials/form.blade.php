@@ -7,7 +7,7 @@
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <x-ui.input
                 name="name"
-                label="Full Name"
+                label="{{ __('users.full_name') }}"
                 placeholder="John Doe"
                 value="{{ old('name', $user->name ?? '') }}"
                 required
@@ -16,7 +16,7 @@
             <x-ui.input
                 name="email"
                 type="email"
-                label="Email Address"
+                label="{{ __('users.email') }}"
                 placeholder="john@example.com"
                 value="{{ old('email', $user->email ?? '') }}"
                 required
@@ -27,7 +27,7 @@
             <x-ui.input
                 name="phone"
                 type="tel"
-                label="Phone Number"
+                label="{{ __('users.phone') }}"
                 placeholder="05xxxxxxxx"
                 value="{{ old('phone', $user->phone ?? '') }}"
                 required
@@ -35,8 +35,8 @@
 
             <x-ui.select
                 name="role"
-                label="Role"
-                placeholder="Select a role"
+                label="{{ __('users.role') }}"
+                placeholder="{{ __('users.select_role') }}"
                 :options="$roles->mapWithKeys(fn ($role) => [$role => $role])->all()"
                 :selected="old('role', $user?->getRoleNames()->first())"
                 required
@@ -45,22 +45,22 @@
 
         @if ($isCreate)
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <x-ui.input name="password" type="password" label="Password" required />
-                <x-ui.input name="password_confirmation" type="password" label="Confirm Password" required />
+                <x-ui.input name="password" type="password" label="{{ __('users.password') }}" required />
+                <x-ui.input name="password_confirmation" type="password" label="{{ __('users.confirm_password') }}" required />
             </div>
         @endif
 
         <x-ui.select
             name="status"
-            label="Status"
-            :options="['pending' => 'Pending', 'active' => 'Active', 'rejected' => 'Rejected']"
+            label="{{ __('messages.status') }}"
+            :options="['pending' => __('users.status.pending'), 'active' => __('users.status.active'), 'rejected' => __('users.status.rejected')]"
             :selected="old('status', $user->status ?? 'pending')"
             required
         />
     </div>
 
     <div class="space-y-2" x-data="{ preview: @js($user?->profilePhotoUrl()) }">
-        <label class="field-label">Profile Photo</label>
+        <label class="field-label">{{ __('users.profile_photo') }}</label>
 
         <div class="flex flex-col items-center gap-4 rounded-[var(--radius-control)] border border-dashed border-border bg-background/60 p-6 text-center">
             <template x-if="preview">
@@ -79,7 +79,7 @@
             </template>
 
             <label class="btn btn-outline cursor-pointer">
-                <span>{{ $isCreate ? 'Upload Photo' : 'Change Photo' }}</span>
+                <span>{{ $isCreate ? __('users.upload_photo') : __('users.change_photo') }}</span>
                 <input
                     type="file"
                     name="profile_photo"
@@ -89,7 +89,7 @@
                 />
             </label>
 
-            <p class="text-xs text-text-muted">PNG or JPG, up to 2MB.</p>
+            <p class="text-xs text-text-muted">{{ __('users.photo_hint') }}</p>
 
             @error('profile_photo')
                 <p class="field-error">{{ $message }}</p>

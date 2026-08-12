@@ -34,6 +34,8 @@
             </a>
 
             @auth
+                <x-notifications-dropdown />
+
                 <x-ui.dropdown align="right" width="56">
                     <x-slot name="trigger">
                         <button type="button" class="flex items-center gap-2 rounded-[var(--radius-control)] py-1.5 ps-1.5 pe-2.5 transition-colors duration-150 hover:bg-black/5">

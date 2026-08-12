@@ -27,7 +27,7 @@ test('favorites page shows the empty state when there are no favorites', functio
     $this->actingAs($user)
         ->get(route('favorites.index'))
         ->assertOk()
-        ->assertSee('No favorite properties yet.');
+        ->assertSee('No favorites yet');
 });
 
 test('a favorite whose property was later rejected still renders gracefully', function () {

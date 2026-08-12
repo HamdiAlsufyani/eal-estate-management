@@ -26,4 +26,12 @@ return [
     'no_users_yet' => 'لا يوجد مستخدمون بعد',
     'latest_inquiries' => 'أحدث الاستفسارات',
     'submitted' => 'تاريخ الإرسال',
+    'no_properties_yet' => 'لا توجد عقارات بعد',
+    'customer_dashboard' => 'لوحتي',
+    'customer_overview_subtitle' => 'إليك نظرة عامة على نشاطك.',
+    'active_inquiries' => 'استفسارات نشطة',
+    'completed_inquiries' => 'استفسارات مكتملة',
+    'recently_viewed' => 'أحدث ما تمت مشاهدته',
+    'unread_notifications' => 'إشعارات غير مقروءة',
+    'recent_favorites' => 'أحدث المفضلة',
 ];

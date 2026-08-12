@@ -31,4 +31,7 @@ return [
     'contact' => 'Contact',
     'owner_portal' => 'Owner Portal',
     'white_label_suite' => 'White-label Suite',
+    'browse_properties' => 'Browse Properties',
+    'recently_viewed' => 'Recently Viewed',
+    'customer_portal' => 'Customer Portal',
 ];

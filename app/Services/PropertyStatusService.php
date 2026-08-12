@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\PropertyStatusChanged;
 use App\Models\Property;
 use App\Models\PropertyStatusHistory;
 use App\Models\User;
@@ -37,7 +38,7 @@ class PropertyStatusService
             ]);
         }
 
-        return DB::transaction(function () use ($property, $oldStatus, $newStatus, $reason, $actor) {
+        $history = DB::transaction(function () use ($property, $oldStatus, $newStatus, $reason, $actor) {
             $property->update(['status' => $newStatus]);
 
             return $property->statusHistories()->create([
@@ -47,6 +48,10 @@ class PropertyStatusService
                 'reason' => $reason,
             ]);
         });
+
+        PropertyStatusChanged::dispatch($property, $oldStatus, $newStatus, $reason, $actor);
+
+        return $history;
     }
 
     public function canTransition(?string $from, string $to): bool

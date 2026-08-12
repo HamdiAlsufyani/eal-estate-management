@@ -9,7 +9,11 @@ use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\PropertyTypeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
+use App\Http\Controllers\Customer\InquiryController as CustomerInquiryController;
+use App\Http\Controllers\Customer\RecentlyViewedController as CustomerRecentlyViewedController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
 use App\Http\Controllers\Owner\InquiryController as OwnerInquiryController;
 use App\Http\Controllers\Owner\PropertyController as OwnerPropertyController;
@@ -33,6 +37,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/properties/{property}/favorite', [FavoriteController::class, 'toggle'])->name('properties.favorite')->withTrashed();
     Route::post('/properties/{property}/inquiries', [PublicInquiryController::class, 'store'])->name('properties.inquiries.store');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
 Route::get('/dashboard', DashboardController::class)
@@ -97,6 +106,17 @@ Route::middleware(['auth', 'approved'])->prefix('owner')->name('owner.')->group(
     Route::delete('properties/{property}/images/{media}', [OwnerPropertyController::class, 'destroyImage'])->name('properties.images.destroy');
 
     Route::resource('properties', OwnerPropertyController::class);
+
+});
+
+Route::middleware(['auth', 'approved'])->prefix('customer')->name('customer.')->group(function () {
+
+    Route::get('dashboard', CustomerDashboardController::class)->name('dashboard');
+
+    Route::get('inquiries', [CustomerInquiryController::class, 'index'])->name('inquiries.index');
+    Route::get('inquiries/{inquiry}', [CustomerInquiryController::class, 'show'])->name('inquiries.show');
+
+    Route::get('recently-viewed', CustomerRecentlyViewedController::class)->name('recently-viewed');
 
 });
 

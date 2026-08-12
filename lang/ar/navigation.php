@@ -31,4 +31,7 @@ return [
     'contact' => 'تواصل معنا',
     'owner_portal' => 'بوابة الملاك',
     'white_label_suite' => 'نظام بعلامة مخصصة',
+    'browse_properties' => 'تصفح العقارات',
+    'recently_viewed' => 'أحدث ما تمت مشاهدته',
+    'customer_portal' => 'بوابة العملاء',
 ];

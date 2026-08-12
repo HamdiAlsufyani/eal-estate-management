@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Owner;
 
+use App\Events\PropertyCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Property\StorePropertyRequest;
 use App\Http\Requests\Admin\Property\UpdatePropertyRequest;
@@ -47,6 +48,8 @@ class PropertyController extends Controller
     public function store(StorePropertyRequest $request): RedirectResponse
     {
         $property = $this->properties->create($request->validated(), $request->user());
+
+        PropertyCreated::dispatch($property);
 
         return redirect()
             ->route('owner.properties.show', $property)

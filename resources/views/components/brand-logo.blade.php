@@ -4,6 +4,6 @@
     <x-application-logo class="{{ $iconClass }} shrink-0 text-secondary" />
     <span class="flex flex-col leading-none">
         <span class="text-[15px] font-semibold tracking-tight {{ $textClass }}">{{ config('app.name') }}</span>
-        <span class="text-[11px] font-medium uppercase tracking-wider {{ $textClass }}/50">Real Estate Suite</span>
+        <span class="text-[11px] font-medium uppercase tracking-wider {{ $textClass }}/50">{{ __('messages.real_estate_suite') }}</span>
     </span>
 </span>

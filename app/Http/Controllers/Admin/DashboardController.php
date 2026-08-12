@@ -14,8 +14,10 @@ class DashboardController extends Controller
 {
     public function __invoke(): View|RedirectResponse
     {
-        if (! auth()->user()->canManageAllProperties()) {
-            return redirect()->route('owner.dashboard');
+        $user = auth()->user();
+
+        if (! $user->canManageAllProperties()) {
+            return redirect()->route($user->can('properties.create') ? 'owner.dashboard' : 'customer.dashboard');
         }
 
         $stats = [

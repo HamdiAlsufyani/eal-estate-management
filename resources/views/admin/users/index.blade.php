@@ -1,9 +1,9 @@
-<x-admin-layout title="Users" :breadcrumbs="[['label' => 'Users']]">
+<x-admin-layout title="{{ __('users.title') }}" :breadcrumbs="[['label' => __('users.title')]]">
     <x-slot name="header">
         <div class="flex items-center justify-between gap-4">
             <div>
-                <h1 class="text-xl font-semibold text-text">Users</h1>
-                <p class="text-sm text-text-muted">Manage accounts, roles, and access approvals.</p>
+                <h1 class="text-xl font-semibold text-text">{{ __('users.title') }}</h1>
+                <p class="text-sm text-text-muted">{{ __('users.subtitle') }}</p>
             </div>
 
             @can('create', \App\Models\User::class)
@@ -11,7 +11,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
-                    New User
+                    {{ __('users.new_user') }}
                 </x-ui.button>
             @endcan
         </div>
@@ -30,13 +30,13 @@
                 <input type="hidden" name="action" x-ref="bulkAction" />
 
                 <div x-show="checked.length > 0" x-cloak class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-control)] bg-primary/5 px-4 py-3">
-                    <p class="text-sm font-medium text-primary"><span x-text="checked.length"></span> user(s) selected</p>
+                    <p class="text-sm font-medium text-primary"><span x-text="checked.length"></span> {{ __('users.users_selected_suffix') }}</p>
 
                     <div class="flex flex-wrap gap-2">
                         @can('bulkAction', \App\Models\User::class)
-                            <x-ui.button type="button" size="sm" variant="outline" @click="$refs.bulkAction.value = 'approve'; $refs.bulkForm.requestSubmit()">Approve Selected</x-ui.button>
-                            <x-ui.button type="button" size="sm" variant="outline" @click="$refs.bulkAction.value = 'reject'; $refs.bulkForm.requestSubmit()">Reject Selected</x-ui.button>
-                            <x-ui.button type="button" size="sm" variant="outline" @click="$refs.bulkAction.value = 'activate'; $refs.bulkForm.requestSubmit()">Activate Selected</x-ui.button>
+                            <x-ui.button type="button" size="sm" variant="outline" @click="$refs.bulkAction.value = 'approve'; $refs.bulkForm.requestSubmit()">{{ __('users.approve_selected') }}</x-ui.button>
+                            <x-ui.button type="button" size="sm" variant="outline" @click="$refs.bulkAction.value = 'reject'; $refs.bulkForm.requestSubmit()">{{ __('users.reject_selected') }}</x-ui.button>
+                            <x-ui.button type="button" size="sm" variant="outline" @click="$refs.bulkAction.value = 'activate'; $refs.bulkForm.requestSubmit()">{{ __('users.activate_selected') }}</x-ui.button>
                         @endcan
 
                         @can('deleteAny', \App\Models\User::class)
@@ -44,9 +44,9 @@
                                 type="button"
                                 size="sm"
                                 variant="danger"
-                                @click="confirmTarget = { mode: 'bulk', label: checked.length + ' selected user(s)' }; $dispatch('open-modal', 'delete-confirm')"
+                                @click="confirmTarget = { mode: 'bulk', label: checked.length + ' {{ __('users.selected_user_count_suffix') }}' }; $dispatch('open-modal', 'delete-confirm')"
                             >
-                                Delete Selected
+                                {{ __('users.delete_selected') }}
                             </x-ui.button>
                         @endcan
                     </div>
@@ -71,14 +71,13 @@
                     </svg>
                 </div>
 
-                <h3 class="mt-4 text-lg font-semibold text-text">Delete User</h3>
+                <h3 class="mt-4 text-lg font-semibold text-text">{{ __('users.delete_user') }}</h3>
                 <p class="mt-2 text-sm text-text-muted">
-                    Are you sure you want to delete <span class="font-medium text-text" x-text="confirmTarget?.label"></span>?
-                    This action cannot be undone.
+                    {{ __('messages.delete_confirm_prefix') }} <span class="font-medium text-text" x-text="confirmTarget?.label"></span>{{ __('messages.delete_confirm_suffix') }}
                 </p>
 
                 <div class="mt-6 flex justify-end gap-3">
-                    <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-confirm')">Cancel</x-ui.button>
+                    <x-ui.button type="button" variant="outline" @click="$dispatch('close-modal', 'delete-confirm')">{{ __('messages.cancel') }}</x-ui.button>
                     <x-ui.button
                         type="button"
                         variant="danger"
@@ -92,7 +91,7 @@
                             }
                         "
                     >
-                        Delete
+                        {{ __('messages.delete') }}
                     </x-ui.button>
                 </div>
             </div>

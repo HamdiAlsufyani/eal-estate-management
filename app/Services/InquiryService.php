@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\InquiryStatusChanged;
 use App\Models\Inquiry;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -24,7 +25,13 @@ class InquiryService
 
     public function updateStatus(Inquiry $inquiry, string $status): Inquiry
     {
+        $oldStatus = $inquiry->status;
+
         $inquiry->update(['status' => $status]);
+
+        if ($oldStatus !== $status) {
+            InquiryStatusChanged::dispatch($inquiry, $oldStatus, $status);
+        }
 
         return $inquiry;
     }

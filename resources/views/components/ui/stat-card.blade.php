@@ -8,12 +8,12 @@
 
 @php
     $iconWraps = [
-        'primary' => 'bg-primary/10 text-primary',
-        'secondary' => 'bg-secondary/10 text-secondary-hover',
-        'success' => 'bg-success-soft text-success-hover',
-        'warning' => 'bg-warning-soft text-warning-hover',
-        'danger' => 'bg-danger-soft text-danger-hover',
-        'info' => 'bg-info-soft text-info-hover',
+        'primary' => 'bg-primary-soft text-primary ring-1 ring-primary/15',
+        'secondary' => 'bg-secondary-soft text-secondary-hover ring-1 ring-secondary/20',
+        'success' => 'bg-success-soft text-success-hover ring-1 ring-success/15',
+        'warning' => 'bg-warning-soft text-warning-hover ring-1 ring-warning/15',
+        'danger' => 'bg-danger-soft text-danger-hover ring-1 ring-danger/15',
+        'info' => 'bg-info-soft text-info-hover ring-1 ring-info/15',
     ];
 @endphp
 

@@ -53,6 +53,7 @@ return [
     // Footer
     'all_rights_reserved' => 'All rights reserved.',
     'version' => 'Version',
+    'real_estate_suite' => 'Real Estate Suite',
     'explore' => 'Explore',
     'account' => 'Account',
     'footer_tagline' => 'Your trusted partner for buying, renting and discovering premium properties.',

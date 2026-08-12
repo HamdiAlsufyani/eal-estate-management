@@ -37,7 +37,7 @@
 
                 <td>
                     <x-ui.badge :variant="$city->is_active ? 'success' : 'gray'">
-                        {{ $city->is_active ? 'Active' : 'Inactive' }}
+                        {{ $city->is_active ? __('messages.active') : __('messages.inactive') }}
                     </x-ui.badge>
                 </td>
 
@@ -46,7 +46,7 @@
                 <td class="text-right">
                     <x-ui.dropdown align="right" width="56">
                         <x-slot name="trigger">
-                            <button type="button" class="btn-icon" aria-label="Actions for {{ $city->name }}">
+                            <button type="button" class="btn-icon" aria-label="{{ __('messages.actions_for', ['name' => $city->name]) }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                 </svg>
@@ -54,10 +54,10 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-ui.dropdown-item :href="route('admin.cities.show', $city)">View Details</x-ui.dropdown-item>
+                            <x-ui.dropdown-item :href="route('admin.cities.show', $city)">{{ __('properties.view_details') }}</x-ui.dropdown-item>
 
                             @can('update', $city)
-                                <x-ui.dropdown-item :href="route('admin.cities.edit', $city)">Edit</x-ui.dropdown-item>
+                                <x-ui.dropdown-item :href="route('admin.cities.edit', $city)">{{ __('messages.edit') }}</x-ui.dropdown-item>
                             @endcan
 
                             @can('delete', $city)
@@ -67,7 +67,7 @@
                                     class="text-danger hover:!text-danger"
                                     @click="confirmTarget = { url: '{{ route('admin.cities.destroy', $city) }}', label: @js($city->name) }; $dispatch('open-modal', 'delete-confirm')"
                                 >
-                                    Delete
+                                    {{ __('messages.delete') }}
                                 </x-ui.dropdown-item>
                             @endcan
                         </x-slot>

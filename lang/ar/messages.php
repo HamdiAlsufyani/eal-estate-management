@@ -53,6 +53,7 @@ return [
     // Footer
     'all_rights_reserved' => 'جميع الحقوق محفوظة.',
     'version' => 'الإصدار',
+    'real_estate_suite' => 'نظام عقاري متكامل',
     'explore' => 'استكشف',
     'account' => 'الحساب',
     'footer_tagline' => 'شريكك الموثوق لشراء وتأجير واكتشاف العقارات المميزة.',

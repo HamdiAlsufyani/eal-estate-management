@@ -26,4 +26,12 @@ return [
     'no_users_yet' => 'No users yet',
     'latest_inquiries' => 'Latest Inquiries',
     'submitted' => 'Submitted',
+    'no_properties_yet' => 'No properties yet',
+    'customer_dashboard' => 'My Dashboard',
+    'customer_overview_subtitle' => 'Here is an overview of your activity.',
+    'active_inquiries' => 'Active Inquiries',
+    'completed_inquiries' => 'Completed Inquiries',
+    'recently_viewed' => 'Recently Viewed',
+    'unread_notifications' => 'Unread Notifications',
+    'recent_favorites' => 'Recent Favorites',
 ];
