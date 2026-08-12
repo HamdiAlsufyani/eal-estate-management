@@ -88,6 +88,33 @@
             @endif
         </x-ui.card>
 
+        <x-ui.card title="{{ __('navigation.recently_viewed') }}">
+            <x-slot name="actions">
+                <x-ui.button :href="route('customer.recently-viewed')" variant="ghost" size="sm">{{ __('properties.view_all') }}</x-ui.button>
+            </x-slot>
+
+            @if ($recentlyViewed->isEmpty())
+                <x-ui.empty-state title="{{ __('customer.no_recently_viewed') }}" description="{{ __('customer.no_recently_viewed_hint') }}">
+                    <x-slot name="action">
+                        <x-ui.button :href="route('properties.index')" variant="primary">{{ __('properties.browse_properties') }}</x-ui.button>
+                    </x-slot>
+                </x-ui.empty-state>
+            @else
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    @foreach ($recentlyViewed as $property)
+                        @if ($property->status === 'approved' && ! $property->trashed())
+                            <x-public.property-card :property="$property" />
+                        @else
+                            <div class="card flex flex-col gap-3 p-4">
+                                <p class="line-clamp-1 font-semibold text-text">{{ $property->title }}</p>
+                                <span class="badge badge-gray w-fit">{{ __('customer.property_no_longer_available') }}</span>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
+        </x-ui.card>
+
         <x-ui.card title="{{ __('dashboard.recent_inquiries') }}">
             <x-slot name="actions">
                 <x-ui.button :href="route('customer.inquiries.index')" variant="ghost" size="sm">{{ __('properties.view_all') }}</x-ui.button>

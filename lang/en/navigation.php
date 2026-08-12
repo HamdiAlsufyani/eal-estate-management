@@ -2,6 +2,8 @@
 
 return [
     'dashboard' => 'Dashboard',
+    'analytics' => 'Analytics',
+    'reports' => 'Reports',
     'properties' => 'Properties',
     'property_types' => 'Property Types',
     'cities' => 'Cities',

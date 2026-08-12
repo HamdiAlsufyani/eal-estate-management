@@ -114,6 +114,27 @@ test('customer dashboard renders correctly in english', function () {
         ->assertSee('Welcome back');
 });
 
+test('recently viewed page renders correctly in arabic', function () {
+    $customer = activeUser();
+    $this->get(route('language.switch', 'ar'));
+
+    $this->actingAs($customer)
+        ->get(route('customer.recently-viewed'))
+        ->assertOk()
+        ->assertSee('dir="rtl"', false)
+        ->assertSee(__('customer.no_recently_viewed', [], 'ar'));
+});
+
+test('recently viewed page renders correctly in english', function () {
+    $customer = activeUser();
+
+    $this->actingAs($customer)
+        ->get(route('customer.recently-viewed'))
+        ->assertOk()
+        ->assertSee('dir="ltr"', false)
+        ->assertSee(__('customer.no_recently_viewed', [], 'en'));
+});
+
 test('authentication pages render correctly in arabic', function () {
     $this->get(route('language.switch', 'ar'));
 

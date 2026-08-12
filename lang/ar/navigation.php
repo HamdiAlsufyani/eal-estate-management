@@ -2,6 +2,8 @@
 
 return [
     'dashboard' => 'لوحة التحكم',
+    'analytics' => 'التحليلات',
+    'reports' => 'التقارير',
     'properties' => 'العقارات',
     'property_types' => 'أنواع العقارات',
     'cities' => 'المدن',

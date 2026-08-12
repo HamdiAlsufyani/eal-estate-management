@@ -7,15 +7,17 @@ use App\Models\Amenity;
 use App\Models\City;
 use App\Models\Property;
 use App\Models\PropertyType;
-use App\Models\PropertyView;
 use App\Services\PropertySearchService;
+use App\Services\PropertyViewService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PropertyController extends Controller
 {
-    public function __construct(private readonly PropertySearchService $search)
-    {
+    public function __construct(
+        private readonly PropertySearchService $search,
+        private readonly PropertyViewService $propertyViews,
+    ) {
     }
 
     public function index(Request $request): View
@@ -45,7 +47,7 @@ class PropertyController extends Controller
         $property->load(['user', 'propertyType', 'city', 'district', 'amenities', 'media']);
         $property->loadCount('views');
 
-        $this->recordView($request, $property);
+        $this->propertyViews->recordView($property, $request->user(), $request->ip(), $request->userAgent());
 
         $isFavorited = $request->user()
             ? $property->favorites()->where('user_id', $request->user()->id)->exists()
@@ -54,30 +56,6 @@ class PropertyController extends Controller
         return view('public.properties.show', [
             'property' => $property,
             'isFavorited' => $isFavorited,
-        ]);
-    }
-
-    private function recordView(Request $request, Property $property): void
-    {
-        $userId = $request->user()?->id;
-        $ip = $request->ip();
-
-        $alreadyViewed = PropertyView::query()
-            ->where('property_id', $property->id)
-            ->where('created_at', '>=', now()->subHours(24))
-            ->when($userId, fn ($query) => $query->where('user_id', $userId))
-            ->when(! $userId, fn ($query) => $query->whereNull('user_id')->where('ip_address', $ip))
-            ->exists();
-
-        if ($alreadyViewed) {
-            return;
-        }
-
-        PropertyView::create([
-            'property_id' => $property->id,
-            'user_id' => $userId,
-            'ip_address' => $ip,
-            'user_agent' => $request->userAgent(),
         ]);
     }
 }

@@ -106,7 +106,23 @@ test('dashboard shows empty states when the customer has no data yet', function 
         ->assertOk()
         ->assertSee(__('customer.no_favorites'))
         ->assertSee(__('customer.no_inquiries'))
-        ->assertSee(__('customer.no_notifications'));
+        ->assertSee(__('customer.no_notifications'))
+        ->assertSee(__('customer.no_recently_viewed'));
+});
+
+test('recently viewed section on the dashboard only shows the current customers own views', function () {
+    $customer = activeUser();
+    $mine = makeProperty(['title' => 'Viewed From Dashboard By Me']);
+    $notMine = makeProperty(['title' => 'Viewed From Dashboard By Someone Else']);
+
+    PropertyView::create(['user_id' => $customer->id, 'property_id' => $mine->id]);
+    PropertyView::create(['user_id' => activeUser()->id, 'property_id' => $notMine->id]);
+
+    $this->actingAs($customer)
+        ->get(route('customer.dashboard'))
+        ->assertOk()
+        ->assertSee('Viewed From Dashboard By Me')
+        ->assertDontSee('Viewed From Dashboard By Someone Else');
 });
 
 test('customer sidebar never exposes admin or owner only routes', function () {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AmenityController;
+use App\Http\Controllers\Admin\AnalyticsController as AdminAnalyticsController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DistrictController;
@@ -8,12 +9,14 @@ use App\Http\Controllers\Admin\FavoriteController as AdminFavoriteController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\PropertyTypeController;
+use App\Http\Controllers\Admin\ReportsController as AdminReportsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
 use App\Http\Controllers\Customer\InquiryController as CustomerInquiryController;
 use App\Http\Controllers\Customer\RecentlyViewedController as CustomerRecentlyViewedController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\Owner\AnalyticsController as OwnerAnalyticsController;
 use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
 use App\Http\Controllers\Owner\InquiryController as OwnerInquiryController;
 use App\Http\Controllers\Owner\PropertyController as OwnerPropertyController;
@@ -92,11 +95,16 @@ Route::middleware(['auth', 'approved'])->prefix('admin')->name('admin.')->group(
 
     Route::get('favorites', [AdminFavoriteController::class, 'index'])->name('favorites.index');
 
+    Route::get('analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index')->middleware('can:analytics.view');
+    Route::get('reports', [AdminReportsController::class, 'index'])->name('reports.index')->middleware('can:analytics.view');
+
 });
 
 Route::middleware(['auth', 'approved'])->prefix('owner')->name('owner.')->group(function () {
 
     Route::get('dashboard', OwnerDashboardController::class)->name('dashboard');
+
+    Route::get('analytics', [OwnerAnalyticsController::class, 'index'])->name('analytics.index');
 
     Route::get('inquiries', [OwnerInquiryController::class, 'index'])->name('inquiries.index');
     Route::get('inquiries/{inquiry}', [OwnerInquiryController::class, 'show'])->name('inquiries.show');
@@ -116,7 +124,9 @@ Route::middleware(['auth', 'approved'])->prefix('customer')->name('customer.')->
     Route::get('inquiries', [CustomerInquiryController::class, 'index'])->name('inquiries.index');
     Route::get('inquiries/{inquiry}', [CustomerInquiryController::class, 'show'])->name('inquiries.show');
 
-    Route::get('recently-viewed', CustomerRecentlyViewedController::class)->name('recently-viewed');
+    Route::delete('recently-viewed', [CustomerRecentlyViewedController::class, 'clear'])->name('recently-viewed.clear');
+    Route::delete('recently-viewed/{property}', [CustomerRecentlyViewedController::class, 'destroy'])->name('recently-viewed.destroy')->withTrashed();
+    Route::get('recently-viewed', [CustomerRecentlyViewedController::class, 'index'])->name('recently-viewed');
 
 });
 

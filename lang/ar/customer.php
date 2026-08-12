@@ -11,4 +11,10 @@ return [
     'my_inquiries_subtitle' => 'الاستفسارات التي أرسلتها إلى ملاك العقارات.',
     'recently_viewed_subtitle' => 'العقارات التي شاهدتها مؤخرًا.',
     'viewed_on' => 'تمت المشاهدة :time',
+    'remove' => 'إزالة',
+    'clear_all' => 'مسح الكل',
+    'clear_recently_viewed_confirm' => 'مسح العقارات التي تمت مشاهدتها مؤخرًا؟',
+    'are_you_sure' => 'هل أنت متأكد؟',
+    'property_no_longer_available' => 'العقار لم يعد متاحًا.',
+    'recently_viewed_cleared' => 'تم مسح العقارات التي تمت مشاهدتها مؤخرًا.',
 ];
